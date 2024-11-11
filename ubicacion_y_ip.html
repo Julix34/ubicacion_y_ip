@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ubicación e IP con Google Maps</title>
+</head>
+<body>
+    <h1>Verificar IP y Ubicación</h1>
+    <button onclick="getLocation()">Obtener Ubicación</button>
+    <p id="location"></p>
+    <p id="ip"></p>
+
+    <script>
+        // Obtener la ubicación con el permiso del usuario
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                document.getElementById("location").innerHTML = "Geolocalización no es compatible.";
+            }
+        }
+
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Mostrar las coordenadas en la página
+            document.getElementById("location").innerHTML =
+                "Latitud: " + latitude + ", Longitud: " + longitude;
+
+            // Crear el enlace a Google Maps con las coordenadas
+            const mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+            document.getElementById("location").innerHTML +=
+                `<br><a href="${mapLink}" target="_blank">Ver en Google Maps</a>`;
+        }
+
+        // Obtener la IP usando una API pública
+        async function getIP() {
+            const response = await fetch("https://api.ipify.org?format=json");
+            const data = await response.json();
+            document.getElementById("ip").innerHTML = "Tu IP es: " + data.ip;
+        }
+
+        getIP();
+    </script>
+</body>
+</html>
